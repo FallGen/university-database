@@ -1,0 +1,57 @@
+                Properties connInfo = new Properties();
+            //РЎРІРѕР№СЃС‚РІР° РґР»СЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє Р‘Р”
+            connInfo.put("user", "");
+            connInfo.put("password","");
+            //СЌС‚Рѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ, РёРЅР°С‡Рµ СЂСѓСЃСЃРєРёРµ СЃРёРјРІРѕР»С‹ РЅРµ Р±СѓРґСѓС‚ РІРѕСЃРїСЂРёРЅРёРјР°С‚СЊСЃСЏ, РІ Р±Р°Р·Рµ РєРёСЂРёР»РёС†Р°...
+            connInfo.put("charSet", "Cp1251");
+                        //РЎС‚СЂРѕРєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє Р‘Р” Рё РєРѕРЅРЅРµРєС‚РѕСЂ
+            Connection conn=DriverManager.getConnection("jdbc:ucanaccess://BG_GUS2.mdb", connInfo);
+            //РџРѕРґРєР»СЋС‡Р°РµРјСЃСЏ
+            Statement stment = conn.createStatement();
+            //РЎРѕРµРґРёРЅРµРЅРёРµ РїСЂРѕС€Р»Рѕ СѓСЃРїРµС€РЅРѕ
+            System.out.println("Connection ok.");
+            //РЎС‚СЂРѕРєР° sql-Р·Р°РїСЂРѕСЃР°
+            String strQuery = "";
+            strQuery = "SELECT * FROM Назначение";
+            //Выполняем запрос
+            ResultSet rs = stment.executeQuery(strQuery);
+            
+            //Создаем новые векторы для данных, которые потом передадим их в JTable
+            Vector row,data=new Vector(),col=new Vector();
+            
+            //Складываем данные из таблицы в векторы
+            //здесь передаются заголовки колонок
+            for(byte i=1;i<=rs.getMetaData().getColumnCount();i++)
+            col.add(rs.getMetaData().getColumnName(i));
+            
+            //здесь передаются данные из строк
+            while(rs.next()){
+                row=new Vector();
+                for(byte i=1;i<=rs.getMetaData().getColumnCount();i++)
+            row.add(rs.getString(i));
+                data.add(row);
+            }
+            
+            // можно читать данные из таблицы таким образом
+//            while(rs.next())
+//            {
+//                String strId   = rs.getString("Код_записи") ;
+//                String strName = rs.getString("Название_поля");
+//
+//                System.out.println(strId + ' ' + strName);
+//            }
+            
+            //здесь в таблицу пережаются заголовки и строки
+            JTable jt=new JTable(data,col);
+            
+            //здесь таблица добавляется в JScrollPane, которая добавляется на форму 
+            JScrollPane jsp=new JScrollPane(jt);
+
+            //glb.setConstraints(jsp, gcb);
+            //frame.add(jsp);
+            //System.out.print(data);
+            
+            // форма отображается
+            //frame.setVisible(true);        
+            //stment.close();
+            //conn.close();
